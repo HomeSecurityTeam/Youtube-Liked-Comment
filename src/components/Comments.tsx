@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import { YouTubeComment } from "../utility/type";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
-interface CommentsProps {
-  comments: YouTubeComment[];
-  formatViews: (views: number) => string;
-  formatDate: (dateString: string) => string;
-}
+import { formatViews, formatDate } from "../utility/util";
+import { useAppSelector } from "../redux/hooks";
+import { RootState } from "../redux/store";
+import { YouTubeComment } from "../utility/type";
 
-const Comments = ({ comments, formatViews, formatDate }: CommentsProps) => {
+const Comments = () => {
+  const comments = useAppSelector((state: RootState) => state.comment);
+  console.log(comments);
   // HTML 태그를 제거하는 함수
   const removeHTMLTags = (text: string) => {
     return text.replace(/<\/?[^>]+(>|$)/g, "");
@@ -17,26 +17,31 @@ const Comments = ({ comments, formatViews, formatDate }: CommentsProps) => {
   return (
     <OuterContainer>
       <Container>
-        {comments
-          .slice()
-          .sort((a, b) => b.likeCount - a.likeCount)
-          .map((comment, index) => (
-            <CommentItem key={index}>
-              <AuthorTime>
-                <Text>{comment.author}</Text>
-                <TimeText>{formatDate(comment.publishedAt)}</TimeText>
-              </AuthorTime>
-              <Text
-                dangerouslySetInnerHTML={{
-                  __html: removeHTMLTags(comment.text),
-                }}
-              />
-              <Like>
-                <LikeIcon icon={faThumbsUp} />
-                <Text>{formatViews(comment.likeCount)}</Text>
-              </Like>
-            </CommentItem>
-          ))}
+        {comments &&
+          Array.isArray(comments) &&
+          comments
+            .slice()
+            .sort(
+              (a: YouTubeComment, b: YouTubeComment) =>
+                b.likeCount - a.likeCount
+            )
+            .map((comment: YouTubeComment, index: number) => (
+              <CommentItem key={index}>
+                <AuthorTime>
+                  <Text>{comment.author}</Text>
+                  <TimeText>{formatDate(comment.publishedAt)}</TimeText>
+                </AuthorTime>
+                <Text
+                  dangerouslySetInnerHTML={{
+                    __html: removeHTMLTags(comment.text),
+                  }}
+                />
+                <Like>
+                  <LikeIcon icon={faThumbsUp} />
+                  <Text>{formatViews(comment.likeCount)}</Text>
+                </Like>
+              </CommentItem>
+            ))}
       </Container>
     </OuterContainer>
   );

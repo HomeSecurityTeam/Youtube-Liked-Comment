@@ -1,19 +1,22 @@
 import { useState, ChangeEvent } from "react";
 import styled from "styled-components";
-
 import getYoutubeData from "../api/YoutubeDataService";
 import { useAppDispatch } from "../redux/hooks";
 import { AppDispatch } from "../redux/store";
 import { setVideo } from "../redux/VideoSlice";
+import { setComment } from "../redux/CommentSlice";
+import getYoutubeComments from "../api/CommentDataService";
 
 const VideoLinkInput = () => {
   const [videoLink, setVideoLink] = useState<string>("");
-
   const dispatch: AppDispatch = useAppDispatch();
 
   const handleSearch = async () => {
     const videoData = await getYoutubeData(videoLink);
+    const commentData = await getYoutubeComments(videoLink);
+    console.log("gggg", commentData);
     dispatch(setVideo(videoData));
+    dispatch(setComment(commentData));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

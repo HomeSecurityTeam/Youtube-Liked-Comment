@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { YouTubeVideo } from "../utility/type";
+import { YouTubeVideo, YouTubeComment } from "../utility/type";
 
-const initialState: YouTubeVideo = {
+const initialVideoState: YouTubeVideo = {
   id: "",
   title: "",
   description: "",
@@ -12,9 +12,16 @@ const initialState: YouTubeVideo = {
   commentCount: 0,
 };
 
+const initialCommentState: YouTubeComment = {
+  author: "",
+  likeCount: 0,
+  text: "",
+  publishedAt: "",
+};
+
 export const videoSlice = createSlice({
   name: "video",
-  initialState,
+  initialState: initialVideoState,
   reducers: {
     setVideo: (state, action: PayloadAction<YouTubeVideo>) => {
       const {
@@ -39,5 +46,16 @@ export const videoSlice = createSlice({
   },
 });
 
+export const commentsSlice = createSlice({
+  name: "comments",
+  initialState: initialCommentState,
+  reducers: {
+    setComments: (state, action: PayloadAction<YouTubeComment>) => {
+      const { author, likeCount, text, publishedAt } = action.payload;
+      state.author = author;
+      state.likeCount = likeCount;
+    },
+  },
+});
 export const { setVideo } = videoSlice.actions;
 export default videoSlice.reducer;

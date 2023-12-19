@@ -1,7 +1,7 @@
 import VideoLinkInput from "../components/VideoLinkInput";
 import VideoInformation from "../components/VideoInformation";
 import styled from "styled-components";
-
+import Comments from "../components/Comments";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 
@@ -14,6 +14,7 @@ const Mainpage = () => {
       <VideoLinkInput />
       <VideoInfoContainer>
         {viewCount > 0 ? <VideoInformation /> : null}
+        <Comments />
       </VideoInfoContainer>
     </Container>
   );
